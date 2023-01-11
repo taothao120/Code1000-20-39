@@ -1,253 +1,348 @@
-#include<iostream>
-#include<cmath>
 
+#include <iostream>
+#include <iomanip>
+#include <cstring>
+#include <algorithm>
+
+int dem=0;
 using namespace std;
 
-int Check_Number (int n);
-void Find_Divisor(int n);
-void Sum_Divisor(int x);
-void Mul_Divisor(int x);
-void Count_Divisor(int x);
-void List_Odd_Divisor(int x);
-void List_Even_Divisor(int x);
-void Mul_Odd_Divisor(int x);
-void Mul_Even_Divisor(int x);
-void Sum_Little_Divisor(int x);
-void Max_Odd_Divisor(int x);
-void Check_Perfect_Number(int x);
-void Check_Prefix_Number(int x);
-void Check_Square_Number( int x);
-void Square_n( int x);
+struct student
+{
+    int ID;
+    char name[30];
+    char fname[30];
+    char cell[30];
+    double dob;
+    char address[30];
 
-int main(){
-  int x, i, n;
-  cout << " Find Greatest common divisor\n";
-  // Find_Divisor(x);
-  // Sum_Divisor(x);
-  // Mul_Divisor(x);
-  // Count_Divisor(x);
-  // List_Odd_Divisor(x);
-  // List_Even_Divisor(x);
-  // Mul_Odd_Divisor(x);
-  // Mul_Even_Divisor(x);
-  // Sum_Little_Divisor(x);
-  // Max_Odd_Divisor(x);
-  // Check_Perfect_Number(x);
-  // Check_Prefix_Number(x);
-  // Check_Square_Number( x);
-  Square_n(x);
-  return 0;
-
-}
-
-int Check_Number (int n){
-    do
-  {
-    cout << " Enter the positive number: ";
-    cin >> n;
-    if (n <= 0)
+    void get_data()
     {
-      cout << n << " is not positive number. Please enter again!!\n";
+      cout<<"Enter student's ID in  format(1XXXXXXXX): ";
+      cin>>ID;
+      cout<<"Enter student's name: ";
+      fflush(stdin);
+      gets(name);
+      cout<<"Enter facutly : ";
+      fflush(stdin);
+      gets(fname);
+      cout<<"Enter student's cell phone number: ";
+      fflush(stdin);
+      gets(cell); 
+      cout<<"Enter student's Address(province): ";
+      fflush(stdin);
+      gets(address);
+      //cin >> address;
+      cout<<"Enter student's Date of Birth(year): ";
+      cin >> dob;
     }
-  } while ( n <= 0);
-  return n;
-  
-}
+    void show_data()
+    {
+        cout <<setw(2)<<++dem<<setw(10)<<ID<<setw(12)<<name<<setw(10)<<fname<<setw(14)<<cell<<setw(12)<<dob<<setw(12)<<address<<endl;
+    }
+};
 
-// Bài 20: Liệt kê tất cả các “ước số” của số nguyên dương n
-// void Find_Divisor(int x){
-//   int a = Check_Number(x);
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( ( a % i) == 0)
-//     {
-//       cout << i << " ";
-//     }
+typedef student ST;
+
+void get_data_all(ST st[],int n);
+void show_data_all(ST *st,int n);
+void Title();
+void Menu();
+void total_data(int &n);
+void add_data(ST st[],int &n);
+void remove_data(ST *st,int &n);
+void update_data(ST *st,int n);
+float Max(ST *st,int n);
+void InMax(ST *st,int n);
+float Min(ST *st,int n);
+void InMin(ST *st,int n);
+void arange_ID(ST *st,int n);
+void arange_name(ST *st,int n);
+void find_data(ST *st,int n);
+void Press();
+
+int main()
+{
+    int n = 0;
+    char b;
+    int choose;
+    ST *st;
+    st = new ST[n];
+    do
+    {
+        Menu();
+        cout <<"Enter selection: ";
+        cin >>choose;
+        switch (choose)
+        {
+            case 1:
+                total_data(n);
+                get_data_all(st, n);
+                Press();
+                break;
+            case 2:
+                show_data_all(st, n);
+                Press();
+                break;
+            case 3:
+                add_data(st, n);
+                Press();
+                break;
+            case 4:
+                remove_data(st, n);
+                Press();
+                break;
+            case 5:
+                InMax(st, n);
+                Press();
+                break;
+            case 6:
+                InMin(st, n);
+                Press();
+                break;
+            case 7:
+                find_data(st, n);
+                Press();
+                break;
+            case 8: 
+                arange_ID(st, n);
+                Press();
+                break;
+            case 9:
+                arange_name(st, n);
+                Press();
+                break;
+        default:
+            cout <<"Wrong! Please enter again!"<<endl;
+            Press();
+            break;
+        }
+        
+        cout <<"Do you want to continue?(y/n): ";
+        cin >>b;
+        if(b == 'n')
+            cout <<"Goodbye\n";
+    } while (b =='y'||b == 'Y');
     
-//   }
-// }
-
-// Bài 21: Tính tổng tất cả các “ ước số” của số nguyên dương n
-// void Sum_Divisor(int x){
-//   int a = Check_Number(x);
-//   int s = 0;
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( ( a % i) == 0)
-//     {
-//       s += i;
-//     }
-//   }
-//   cout << s ;
-// }
-
-// Bài 22:Tính tích tất cả các “ước số” của số nguyên dương n
-// void Mul_Divisor(int x){
-//   int a = Check_Number(x);
-//   int s = 1;
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( ( a % i) == 0)
-//     {
-//       s *= i;
-//     }
-//   }
-//   cout << s ;
-// }
-
-// Bài 23: Đếm số lượng “ước số” của số nguyên dương n
-// void Count_Divisor(int x){
-//   int a = Check_Number(x);
-//   int s = 0;
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( ( a % i) == 0)
-//     {
-//       s += 1;
-//     }
-//   }
-//   cout << s ;
-// }
-
-// Bài 24: Liệt kê tất cả các “ước số lẻ” của số nguyên dương n
-// void List_Odd_Divisor(int x){
-//   int a = Check_Number(x);
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( (( a % i) == 0) && ((i % 2) != 0 ))
-//     {
-//        cout << i << " ";
-//     }
-//   }
-// }
-
-// Bài 25: Tính tổng tất cả các “ước số chẵn” của số nguyên dương n
-// void List_Even_Divisor(int x){
-//   int a = Check_Number(x);
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( (( a % i) == 0) && ((i % 2) == 0 ))
-//     {
-//        cout << i << " ";
-//     }
-//   }
-// }
-
-// Bài 26: Tính tích tất cả các “ước số lẻ” của số nguyên dương n
-// void Mul_Odd_Divisor(int x){
-//   int a = Check_Number(x);
-//   int S = 1;
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( (( a % i) == 0) && ((i % 2) != 0 ))
-//     {
-//        S *= i;
-//     }
-//   }
-//   cout << S;
-// }
-
-// Bài 27: Đếm số lượng “ước số chẵn” của số nguyên dương n
-// void Mul_Even_Divisor(int x){
-//   int a = Check_Number(x);
-//   int S = 1;
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( (( a % i) == 0) && ((i % 2) == 0 ))
-//     {
-//        S *= i;
-//     }
-//   }
-//   cout << S;
-// }
-
-// Bài 28: Cho số nguyên dương n. Tính tổng các ước số nhỏ hơn chính nó
-// void Sum_Little_Divisor(int x){
-//   int a = Check_Number(x);
-//   int s = 0;
-//   for (int i = 1; i < a; i++)
-//   {
-//     if ( ( a % i) == 0)
-//     {
-//       s += i;
-//     }
-//   }
-//   cout << s ;
-// }
-
-// Bài 29: Tìm ước số lẻ lớn nhất của số nguyên dương n. Ví dụ n = 100 ước lẻ lớn nhất là 25
-// void Max_Odd_Divisor(int x){
-//   int a = Check_Number(x);
-//   int max = 0;
-//   for (int i = 1; i <= a; i++)
-//   {
-//     if ( (( a % i) == 0) && ((i % 2) != 0 ))
-//     {
-//        max = i;
-//     }
-//   }
-//   cout << max;
-// }
-
-// Bài 30: Cho số nguyên dương n. Kiểm tra xem n có phải là số hoàn thiện hay không
-// void Check_Perfect_Number(int x){
-//   int a = Check_Number(x);
-//   int s = 0;
-//   for (int i = 1; i < a; i++)
-//   {
-//     if ( (a % i ) == 0)
-//     {
-//       s += i;
-//     }
-//   }
-//   if ( s == a)
-//   {
-//     cout << a << " is a perfect number";
-//   } 
-//   else {cout << a << " is not a perfect number";}
-// }
-
-// Bài 31: Cho số nguyên dương n. Kiểm tra xem n có phải là số nguyên tố hay không
-// void Check_Prefix_Number(int x){
-//   int a = Check_Number(x);
-//   for (int i = 2; i < a; i++)
-//   {
-//     if ( (a % i ) == 0)
-//     {
-//      cout << a << " is not a prefix number";
-//      break;
-//     }
-//   }
-//   cout << a << " is a prefix number";
- 
-// }
-
-// Bài 32: Cho số nguyên dương n. Kiểm tra xem n có phải là số chính phương hay không
-// void Check_Square_Number( int x){
-//   int a = Check_Number(x);
-//   if ( sqrt((float) a) == (int)sqrt((float) a))
-//   {
-//     cout << a << " is a  square number";
-//   }
-//   else cout << a << " is not a square numer";
-// }
-
-
-// Bài 33: Tính S(n) = CanBac2(2+CanBac2(2+….+CanBac2(2 + CanBac2(2)))) có n dấu căn
-void Square_n( int x){
-  int a = Check_Number(x);
-  int s = 2 + sqrt(2), t;
-  for (int i = 0; i < a + 1 ; i++)
-  {
-    t = sqrt(s);
-    s = t;
-  }
-  cout << t ;
-  
+    delete[] st;
+    return 0;
 }
 
-// Bài 34: Tính S(n) = CanBac2(n+CanBac2(n – 1 + CanBac2( n – 2 + … + CanBac2(2 + CanBac2(1)  có n dấu căn
-// Bài 36: Tính S(n) = CanBac2(n! + CanBac2((n-1)! +CanBac2((n – 2)! + … + CanBac2(2!) + CanBac2(1!)))) có n dấu căn
-// Bài 37: Tính S(n) = CanBac N(N + CanBac N – 1(N – 1 + … + CanBac3(3 + CanBac2(2))) có n – 1 dấu căn
-// Bài 38: Tính S(n) = CanBac N + 1(N + CanBac N(N – 1 +…+CanBac3(2 + CanBac2(1)))) có n dấu căn
-// Bài 39: Tính S(n) = CanBac N + 1(N! + CanBacN((N – 1)! + … + CanBac3(2! + CanBac2(1!))) có n dấu căn
+void get_data_all(ST st[], int n)
+{
+    for(int i=0;i<n;i++)
+    {
+        cout <<"Nhap thong tin loai hoa thu "<<i+1<<": "<<endl;
+        st[i].get_data();
+    }
+}
+
+void Title()
+{
+    cout<<setw(3)<<"STT"<<setw(8)<<"ID"<<setw(12)<<"NAME"<<setw(14)<<"FACULTY"<<setw(12)<<"PHONE"<<setw(12)<<"BIRTH"<<setw(12)<<"ADDRESS"<< endl;
+}
+
+void show_data_all(ST *st, int n)
+{
+    cout <<"List of student: "<<endl;
+    Title();
+    for(int i=0;i<n;i++)
+    {
+        st[i].show_data();
+    }
+}
+
+// ham them 1 sinh vien
+void add_data(ST st[], int &n)
+{
+   int dem = 0;
+    n++;
+    cout <<"Enter student information: "<<endl;
+    st[n-1].get_data();
+}
+// hàm xóa 1 sinh viên
+void remove_data(ST *st, int &n)
+{
+    int so;
+    int dem = 0;
+    cout <<"Enter ID: ";
+    cin >>so;
+    for(int i=0; i<n;i++)
+    {
+        if(st[i].ID == so)
+        {
+           for(int j=i;j<n;j++)
+                st[j] = st[j+1];
+            dem++;
+        }
+    }
+    if(dem == 0)
+        cout <<"Wrong!"<<endl;
+    else n--;
+}
+
+// hàm cập nhật thông tinh sinh viên
+
+void update_data(ST *st, int n)
+{
+    int so;
+    int res = 0;
+    cout <<"Enter ID of student: ";
+    cin >>so;
+    for(int i=0; i<n;i++)
+    {
+        if(st[i].ID == so)
+        {
+           st[i].get_data();
+           res++;
+        }
+    }
+    if(res == 0)
+        cout <<"Wrong!"<<endl;
+}
+
+// hàm trả về điểm cao nhất
+
+float Max(ST *st, int n)
+{
+    int max = st[0].ID;
+    for(int i=1;i<n;i++)
+    {
+        if(st[i].ID >max)
+        {
+            max = st[i].ID;
+        }
+    }
+    return max;
+}
+// ham in ra sinh vien co diem trung binh cao nhat
+void InMax(ST *st, int n)
+{
+    dem = 0;
+    cout <<"Max: "<<endl;
+    Title();
+    for(int i=0;i<n;i++)
+    {
+        if(st[i].ID == Max(st, n) )
+        {
+            st[i].show_data();
+        }
+    }
+}
+// hàm trả về điểm min
+float Min(ST *st, int n)
+{
+    int min = st[0].ID;
+    for(int i=1;i<n;i++)
+    {
+        if(st[i].ID <min)
+        {
+            min= st[i].ID;
+        }
+    }
+    return min;
+}
+
+// ham in ra sinh vien co diem trung binh thap nhat
+void InMin(ST *st, int n)
+{
+    dem = 0;
+    cout <<"Min: "<<endl;
+    Title();
+    for(int i=0;i<n;i++)
+    {
+        if(st[i].ID == Min(st, n) )
+        {
+            st[i].show_data();
+        }
+    }
+}
+
+// hàm sắp xếp sinh viên theo mã số sinh viên
+void arange_ID(ST *st, int n)
+{
+    dem=0;
+    cout <<"Arange: "<<endl;
+    Title();
+    for(int i=0;i<n-1;i++)
+    {
+        for(int j=i+1;j<n;j++)
+        {
+            if(st[i].ID > st[j].ID )
+            {
+                swap(st[i], st[j]);
+            }
+        }
+    }
+    show_data_all(st, n);
+}
+
+
+
+// ham nhap so luogn sinh vien
+void total_data(int &n)
+{
+    do
+    {
+        cout <<"Enter total data: ";
+        cin >>n;
+        if(n<0)
+            cout <<"Wrong!Please enter again!"<<endl;
+    }while(n<0);
+}
+
+// tim kiem sinh vien thong qua ma so sinh vien
+void find_data(ST *st, int n)
+{
+    int ms,res=0;
+    cout <<"Enter ID of student: ";
+    cin >>ms;
+    for(int i=0;i<n;i++)
+    {
+        if(st[i].ID == ms)
+        {
+            st[i].show_data();
+            res++;
+        }
+    }
+    if(res == 0)
+        cout <<"Student ID is not in the list!"<<endl;
+}
+
+// sắp xếp danh sách học sinh theo abc
+void arange_name(ST *st,int n)
+{
+	for(int i=0;i<n-1;i++)
+	{
+		for(int j=i+1;j<n;j++)
+		{
+		   if(strcmp(st[i].name,st[j].name)>0)
+		  {
+              swap(st[i], st[j]);
+		  }
+		}
+	} 
+    show_data_all(st, n);
+}
+void Menu(){
+    cout<<" MENU "<<"\n";
+    cout<<" 1. Create list"<<"\n";
+    cout<<" 2. Show list "<<"\n";
+    cout<<" 3. Add "<<"\n";
+    cout<<" 4. Remove "<<"\n";
+    cout<<" 5. Max"<<"\n";
+    cout<<" 6. Min"<<"\n"; 
+    cout<<" 7. Find"<<"\n"; 
+    cout<<" 8. Arange by ID"<<"\n"; 
+    cout<<" 9. Arange by name\n";
+    cout<<"0. Thoat"<<endl;
+}
+
+void Press()
+{
+    system("pause");
+    system("cls");
+}
+
+
+
